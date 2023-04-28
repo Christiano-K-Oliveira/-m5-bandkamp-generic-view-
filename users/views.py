@@ -12,44 +12,53 @@ class UserView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
 
-class UserDetailView(APIView):
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAccountOwner]
 
-    def get(self, request: Request, pk: int) -> Response:
-        """
-        Obtençao de usuário
-        """
-        user = get_object_or_404(User, pk=pk)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    # lookup_url_kwarg = "pk"
 
-        self.check_object_permissions(request, user)
 
-        serializer = UserSerializer(user)
+# class UserDetailView(APIView):
+#     authentication_classes = [JWTAuthentication]
+#     permission_classes = [IsAccountOwner]
 
-        return Response(serializer.data)
+#     def get(self, request: Request, pk: int) -> Response:
+#         """
+#         Obtençao de usuário
+#         """
+#         user = get_object_or_404(User, pk=pk)
 
-    def patch(self, request: Request, pk: int) -> Response:
-        """
-        Atualização de usuário
-        """
-        user = get_object_or_404(User, pk=pk)
+#         self.check_object_permissions(request, user)
 
-        self.check_object_permissions(request, user)
+#         serializer = UserSerializer(user)
 
-        serializer = UserSerializer(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+#         return Response(serializer.data)
 
-        return Response(serializer.data)
+#     def patch(self, request: Request, pk: int) -> Response:
+#         """
+#         Atualização de usuário
+#         """
+#         user = get_object_or_404(User, pk=pk)
 
-    def delete(self, request: Request, pk: int) -> Response:
-        """
-        Deleçao de usuário
-        """
-        user = get_object_or_404(User, pk=pk)
+#         self.check_object_permissions(request, user)
 
-        self.check_object_permissions(request, user)
+#         serializer = UserSerializer(user, data=request.data, partial=True)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
 
-        user.delete()
+#         return Response(serializer.data)
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def delete(self, request: Request, pk: int) -> Response:
+#         """
+#         Deleçao de usuário
+#         """
+#         user = get_object_or_404(User, pk=pk)
+
+#         self.check_object_permissions(request, user)
+
+#         user.delete()
+
+#         return Response(status=status.HTTP_204_NO_CONTENT)

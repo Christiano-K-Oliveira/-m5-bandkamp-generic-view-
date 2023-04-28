@@ -16,7 +16,6 @@ class SongViewTest(APITestCase):
 
         cls.album = create_album_with_user(user=cls.user)
         cls.album_2 = create_album_with_user(user=cls.user)
-        
 
         cls.BASE_URL = f"/api/albums/{cls.album.pk}/songs/"
 
@@ -50,7 +49,6 @@ class SongViewTest(APITestCase):
         )
         self.assertEqual(expected_len, results_len, msg)
 
-
         list_album_ids = [item.get("album_id", None) for item in resulted_data["results"]]
         msg = (
             "Verifique se você está retornando a chave 'album_id' de cada música " +
@@ -70,9 +68,6 @@ class SongViewTest(APITestCase):
         self.assertEqual(expected_len_album_id_set, len(resulted_set_album_ids), msg)
 
         self.assertSetEqual(expected_set_album_ids, resulted_set_album_ids, msg)
-
-
-
 
     def test_song_creation_without_required_fields(self):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + self.access_token)
